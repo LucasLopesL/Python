@@ -8,7 +8,8 @@ pyautogui.PAUSE = 1
 
 pyautogui.press("win")
 pyautogui.write("chrome")
-pyautogui.press("enter")
+pyautogui.press("enter")  
+
 link = "https://dlp.hashtagtreinamentos.com/python/intensivao/login"
 pyautogui.write(link)
 pyautogui.press("enter")
@@ -16,18 +17,18 @@ time.sleep(5)
 
 #Passo 02 - Fazer Login
 
-pyautogui.click(x=751, y=470)
-pyautogui.white("pythonimpressionador@gmail.com")
+pyautogui.click(x=925, y=407)
+pyautogui.write("pythonimpressionador@gmail.com")
 pyautogui.press("tab")
 pyautogui.write("minha senha")
 pyautogui.press("tab")
-pyautogui.click(x=946, y=676, button= "left")
+pyautogui.click(x=945, y=584, button= "left")
 
 tabela = pandas.read_csv("produtos.csv")
-
+print(tabela)
 #Passo 03 - Cadastrar Produto
 for linha in tabela.index:
-    pyautogui.click(x=725, y=323)
+    pyautogui.click(x=730, y=294)
 
     codigo = tabela.loc[linha, "codigo"]
     pyautogui.write(codigo)
@@ -45,7 +46,7 @@ for linha in tabela.index:
     pyautogui.write(str(categoria))
     pyautogui.press("tab")
 
-    preco = tabela.loc[linha, "preco"]
+    preco = tabela.loc[linha, "preco_unitario"]
     pyautogui.write(str(preco))
     pyautogui.press("tab")
 
