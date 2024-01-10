@@ -54,7 +54,9 @@ for linha in tabela.index:
     pyautogui.press("tab")
 
     obs = tabela.loc[linha, "obs"]
-    pyautogui.write(obs)
+    if not pandas.isna(obs):
+        pyautogui.write(obs)
+        
     pyautogui.press("tab")
 
     pyautogui.press("enter")
