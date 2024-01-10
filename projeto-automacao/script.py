@@ -17,7 +17,7 @@ time.sleep(5)
 
 #Passo 02 - Fazer Login
 
-pyautogui.click(x=925, y=407)
+pyautogui.click(x=925, y=407)   
 pyautogui.write("pythonimpressionador@gmail.com")
 pyautogui.press("tab")
 pyautogui.write("minha senha")
