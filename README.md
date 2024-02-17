@@ -1,2 +1,2 @@
 # Python
- Projetos em Python
+ Cases de estudos em Python
