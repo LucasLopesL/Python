@@ -12,16 +12,10 @@ class Televisao:
         canal = int(input('Digite o canal que deseja ir: '))
         self.canal = canal
 
-canal = str(input('Diga o canal da televisão: '))
-volume = int(input('Digite o volume da televisão: '))
+tv1 = Televisao()
 
-tv1 = Televisao
-
-tv1.aumentar_volume(tv1, 2)
-tv1.diminuir_volume(tv1, 3)
-tv1.alterar_canal(tv1, 1)
-
-print(tv1.canal)
+tv1.aumentar_volume(tv1)
+tv1.diminuir_volume(tv1)
+tv1.alterar_canal(tv1)
 
 print(f'A tv está no volume {tv1.volume} e no canal {tv1.canal}')
-
