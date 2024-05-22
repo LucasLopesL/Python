@@ -1,6 +1,6 @@
 # Alunos: 
 
-# Lucas Lopes -> R.A:2303315; 
+# Lucas Lopes -> R.A: 2303315; 
 # Enzo Dancona de Souza -> R.A: 2302654;
 # Luigi Costabile Brum -> R.A: 2302528
 
@@ -209,7 +209,7 @@ print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
 sleep(0.5)
 
 while True: 
-    print('MENU:\n1. Cadastrar Médico\n2.Cadastrar Paciente\n3.Cadastrar Exame\n4.Consultar Exames\n5.Encerrar Programa')
+    print('MENU:\n1.Cadastrar Médico\n2.Cadastrar Paciente\n3.Cadastrar Exame\n4.Consultar Exames\n5.Encerrar Programa')
     opcao = str(input('Digite a opção desejada: ')).strip()
     if opcao == '1':
         cadastrar_medico()
