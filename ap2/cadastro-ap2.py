@@ -1,13 +1,13 @@
 # Alunos: 
 
 # Lucas Lopes -> R.A:2303315; 
-# Luigi Costabile Brum -> R.A:;
-# Enzo Dancona de Souza -> R.A:
+# Enzo Dancona de Souza -> R.A: 2302654;
+# Luigi Costabile Brum -> R.A: 2302528
 
 # Módulos
 
 from time import sleep
-from sqlalchemy import create_engine, text, Column, Integer, String, Float, ForeignKey, VARCHAR
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, relationship
 
 # Configuração de Conexão com o Banco de dados SQLITE
@@ -18,10 +18,6 @@ engine = create_engine("sqlite:///server.db")
 # Base para todas as classes de modelo
 
 Base = DeclarativeBase()
-
-# Inicia a sessão com o banco de dados
-
-session = Session(engine)
 
 # Classe Base/Padrão do SQLALCHEMY
 
@@ -60,39 +56,24 @@ class Medico(Base):
 class Exame(Base):
     __tablename__ = 'EXAME'
     id = Column('ID', Integer, primary_key=True)
-    id_medico = Column(Integer, ForeignKey('medico.id'))
-    id_paciente = Column(Integer, ForeignKey('id.paciente'))
-    descricao = Column(String(255))
-    resultado = Column(String(255))
+    id_medico = Column("ID.MEDICO", Integer, ForeignKey('MEDICO.ID'))
+    id_paciente = Column("ID_PACIENTE", Integer, ForeignKey('PACIENTE.ID'))
+    descricao = Column("DESCRIÇÃO", String(255))
+    resultado = Column("RESULTADO", String(255))
     medico = relationship("Medico", back_populates="exames")
     paciente = relationship("Paciente")
 
+Medico.exames = relationship("Exame", order_by=Exame.id, back_populates="medico") # Define a relaçao entre as tabelas (Pelo método 'relationship') "Medico" e "Exame". "Exame" refere-se à classe Exame, indicando que esta relação é com a tabela Exame. O parâmetro order by indica a organização que os dados que no caso devem ser de acordo com o id da tabela Exame. Por último o parâmetro back_populates indica uma relação bilateral entre  Exame e Medico, que faz com que fique fácil a relação de um exame a um médico e de um médico a um exame.
 
-# Script para criação das tabelas no Banco de dados, porém elas podem ser criadas automaticamente através das classes por "Base.metadata.create_all(engine)".
+# Criação das tabelas no Banco de dados
 
-with engine.connect() as connection:
-    connection.execute("""CREATE TABLE IF NOT EXISTS PACIENTE (
-        ID INTEGER PRIMARY KEY,
-        NOME VARCHAR(255),
-        CPF VARCHAR(255),
-        IDADE INTEGER)""")
+Base.metadata.create_all(engine) #Método utilizado para criar tabelas com base em classes definidas
 
-    connection.execute("""CREATE TABLE IF NOT EXISTS MEDICO (
-        ID INTEGER PRIMARY KEY,
-        NOME VARCHAR(255),
-        CRM VARCHAR(255),
-        ESPECIALIZACAO VARCHAR(255))""")
-    
-    connection.execute("""CREATE TABLE IF NOT EXISTS EXAME (
-        ID INTEGER PRIMARY KEY,
-        ID_MEDICO INTEGER,
-        ID_PACIENTE INTEGER,
-        DESCRICAO VARCHAR(255),
-        RESULTADO VARCHAR(255))""")
-
+# Inicia a sessão com o banco de dados
 
 Session = sessionmaker(bind=engine)
 session = Session()
+
 
 # Funções
 
@@ -119,13 +100,13 @@ def cadastrar_medico():
     crm = int(input('Digite o CRM do médico (Sem Pontuação): '))
     especializacao = str(input("Digite a especialixação do médico: ")).strip()
     medico = Medico(nome=nome, crm=crm, especializacao=especializacao)
-    Session.add(medico)
+    session.add(medico)
     confirmacao = str(input('Você tem certeza dos dados inseridos? (S/N)')).casefold().strip()
     if confirmacao == 's':
-        Session.commit()
+        session.commit()
+        print('Médico cadastrado com sucesso!')
     else:
         print('Dados descartados com sucesso!')
-    print('Médico cadastrado com sucesso!')
     
 
 def cadastrar_paciente():
@@ -150,13 +131,14 @@ def cadastrar_paciente():
     cpf = int(input('Digite o CPF do paciente (Sem pontuação): '))
     idade = int(input('Digite a idade do paciente:'))
     paciente = Paciente(nome=nome, cpf=cpf, idade=idade)
-    Session.add(paciente)
+    session.add(paciente)
     confirmacao = str(input('Você tem certeza dos dados inseridos? (S/N): ')).casefold().strip()
     if confirmacao == 's':
-        Session.commit()
+        session.commit()
+        print('Paciente cadastrado com sucesso!')
     else:
         print('Dados descartados com sucesso!')
-    print('Paciente cadastrado com sucesso!')
+    
 
 
 def cadastrar_exame():
@@ -182,13 +164,13 @@ def cadastrar_exame():
     descricao = str(input('Descrição do exame: ')).strip()
     resultado = str(input('Resultado do exame: ')).strip()
     exame = Exame(id_medico=id_medico, id_paciente=id_paciente, descricao=descricao, resultado=resultado)
-    Session.add(exame)
+    session.add(exame)
     confirmacao = str(input('Você tem certeza dos dados inseridos? (S/N): ')).casefold().strip()
     if confirmacao == 's':
-        Session.commit()
+        session.commit()
+        print('Exame cadastrado com sucesso!')
     else:
         print('Dados descartados com sucesso!')
-    print('Exame cadastrado com sucesso!')
 
 
 def consultar_exames():
@@ -207,7 +189,7 @@ def consultar_exames():
     Retorna os exames de determinado paciente.
     '''
 
-    id_paciente = int('Digite o ID do paciente que deseja consultar o exame: ')
+    id_paciente = int(input('Digite o ID do paciente que deseja consultar o exame: '))
     exames = session.query(Exame).filter_by(id_paciente=id_paciente).all()
     if exames:
         for exame in exames:
