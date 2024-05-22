@@ -63,7 +63,7 @@ class Exame(Base):
     medico = relationship("Medico", back_populates="exames")
     paciente = relationship("Paciente")
 
-Medico.exames = relationship("Exame", order_by=Exame.id, back_populates="medico") # Define a relaçao entre as tabelas (Pelo método 'relationship') "Medico" e "Exame". "Exame" refere-se à classe Exame, indicando que esta relação é com a tabela Exame. O parâmetro order by indica a organização que os dados que no caso devem ser de acordo com o id da tabela Exame. Por último o parâmetro back_populates indica uma relação bilateral entre  Exame e Medico, que faz com que fique fácil a relação de um exame a um médico e de um médico a um exame.
+Medico.exames = relationship("Exame", order_by=Exame.id, back_populates="medico") # Define a relaçao entre as tabelas (Pelo método 'relationship') "Medico" e "Exame". "Exame" refere-se à classe Exame, indicando que esta relação é com a tabela Exame. O parâmetro order by indica a organização que os dados que no caso devem ser de acordo com o id da tabela Exame. Por último o parâmetro back_populates indica uma relação bilateral entre Exame e Medico, que faz com que fique fácil a relação de um exame a um médico e de um médico a um exame.
 
 # Criação das tabelas no Banco de dados
 
