@@ -7,40 +7,23 @@
 # Módulos
 
 from time import sleep
-from sqlalchemy import create_engine, text, Column, Integer, String, Float, ForeignKey, Varchar
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import create_engine, text, Column, Integer, String, Float, ForeignKey, VARCHAR
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, relationship
 
 # Configuração de Conexão com o Banco de dados SQLITE
 
 engine = create_engine("sqlite:///server.db")
 
-# Script para ciração das tabelas no Banco de dados
 
-with engine.connect() as connection:
-    result = connection.execute("""CREATE TABLE IF NOT EXISTS PACIENTE (
-                                ID INTEGER PRIMARY KEY,
-                                NOME VARCHAR(255),
-                                CPF VARCHAR(255),
-                                IDADE INTEGER)""")
-    
-connection.execute("""CREATE TABLE IF NOT EXISTS MEDICO (
-                        ID INTEGER PRIMARY KEY,
-                        NOME VARCHAR(255),
-                        CRM VARCHAR(255),
-                        ESPECIALIZACAO VARCHAR(255))""")
+# Base para todas as classes de modelo
 
-connection.execute("""CREATE TABLE IF NOT EXISTS EXAME (
-                        ID INTEGER PRIMARY KEY,
-                        ID_MEDICO INTEGER,
-                        ID_PACIENTE INTEGER,
-                        DESCRICAO VARCHAR(255),
-                        RESULTADO VARCHAR(255))""")
+Base = DeclarativeBase()
 
 # Inicia a sessão com o banco de dados
 
 session = Session(engine)
 
-# Classe Base/Padão do SQLALCHEMY
+# Classe Base/Padrão do SQLALCHEMY
 
 class Base(DeclarativeBase):
     pass
@@ -79,9 +62,37 @@ class Exame(Base):
     id = Column('ID', Integer, primary_key=True)
     id_medico = Column(Integer, ForeignKey('medico.id'))
     id_paciente = Column(Integer, ForeignKey('id.paciente'))
-    descricao = Column(Varchar(255))
-    resultado = Column(Varchar(255))
+    descricao = Column(String(255))
+    resultado = Column(String(255))
+    medico = relationship("Medico", back_populates="exames")
+    paciente = relationship("Paciente")
 
+
+# Script para criação das tabelas no Banco de dados, porém elas podem ser criadas automaticamente através das classes por "Base.metadata.create_all(engine)".
+
+with engine.connect() as connection:
+    connection.execute("""CREATE TABLE IF NOT EXISTS PACIENTE (
+        ID INTEGER PRIMARY KEY,
+        NOME VARCHAR(255),
+        CPF VARCHAR(255),
+        IDADE INTEGER)""")
+
+    connection.execute("""CREATE TABLE IF NOT EXISTS MEDICO (
+        ID INTEGER PRIMARY KEY,
+        NOME VARCHAR(255),
+        CRM VARCHAR(255),
+        ESPECIALIZACAO VARCHAR(255))""")
+    
+    connection.execute("""CREATE TABLE IF NOT EXISTS EXAME (
+        ID INTEGER PRIMARY KEY,
+        ID_MEDICO INTEGER,
+        ID_PACIENTE INTEGER,
+        DESCRICAO VARCHAR(255),
+        RESULTADO VARCHAR(255))""")
+
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # Funções
 
@@ -115,7 +126,7 @@ def cadastrar_medico():
     else:
         print('Dados descartados com sucesso!')
     print('Médico cadastrado com sucesso!')
-
+    
 
 def cadastrar_paciente():
     
