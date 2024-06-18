@@ -2,7 +2,7 @@
 
 # Lucas Lopes -> R.A: 2303315; 
 # Enzo Dancona de Souza -> R.A: 2302654;
-# Luigi Costabile Brum -> R.A: 2302528
+# Luigi Brum Costabile-> R.A: 2302528
 
 
 # Módulos
