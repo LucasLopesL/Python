@@ -44,3 +44,49 @@ print(f'A quantidade de funcionários por área é {funcionarios_area}')
 
 ticket_medio = clientes_df["Valor Contrato Mensal"].mean()
 print(f'O ticket médio do contratos mensais é de R${ticket_medio:,.2f}')
+
+
+# Importando base de dados da Internet
+
+exportacoes_df = pd.read_csv(r"C:\Users\lucas\OneDrive\Área Pessoal\MeusProjetos\Python\Python\projeto-analise-de-dados-pandas\exportacoes_franca.csv", sep=",", decimal=",")
+
+
+# Evolução das exportções de 2016 a 2020
+
+def formatar(valor):
+    valor_formatado = f'US$ {valor:,.2f}'
+    return valor_formatado
+
+
+evolucao_df = exportacoes_df[["Year", "US$ FOB"]].groupby("Year").sum()
+evolucao_df = evolucao_df["US$ FOB"].apply(formatar)
+print(f"A Evolução das exportações na França do ano de 2016 até o ano de 2020 foi\n {evolucao_df}")
+
+
+# Quais os produtos mais exportados ao longo do período
+
+produtos_df = exportacoes_df[["SH2 Description", "US$ FOB"]].groupby("SH2 Description").sum(numeric_only=True).sort_values(by="US$ FOB", ascending=False)
+produtos_df = produtos_df["US$ FOB"].apply(formatar)
+print(f'Os Produtos mais exportados ao longo do período foram\n{produtos_df}')
+
+
+# Em 2020 qual cidade mais exportou na França
+
+exportacoes_2020_df = exportacoes_df.loc[exportacoes_df["Year"] == 2020, :]
+exportacoes_2020_df = exportacoes_2020_df[["City", "US$ FOB"]].groupby("City").sum(numeric_only=True).sort_values(by="US$ FOB", ascending=False)
+exportacoes_2020_df = exportacoes_2020_df["US$ FOB"].apply(formatar)
+print(f'A cidade que mais exportou em 2020 foi: \n {exportacoes_2020_df}')
+
+
+# Quais os produtos mais exportados em (US$) que as 02 maiores cidades (em exportação exportaram)
+
+tabela_2020 = exportacoes_df.loc[exportacoes_df["Year"] == 2020, :]
+tabelas_cidades_2020 = tabela_2020[["City", "US$ FOB"]].groupby("City").sum()
+tabelas_cidades_2020 = tabelas_cidades_2020.sort_values(by="US$ FOB", ascending=False)
+tabelas_cidades_2020["US$ FOB"] = tabelas_cidades_2020["US$ FOB"].apply(formatar)
+cidade = tabelas_cidades_2020.index[0]
+tabela_cidade = tabela_2020.loc[tabela_2020["City"] == cidade, :]
+tabela_produto_cidade = tabela_cidade[["SH2 Description", "US$ FOB"]].groupby("SH2 Description").sum()
+tabela_produto_cidade = tabela_produto_cidade.sort_values(by="US$ FOB", ascending=False)
+tabela_produto_cidade["US$ FOB"] = tabela_produto_cidade["US$ FOB"].apply(formatar)
+print(f'Os produtos mais exportados da cidade {cidade} são:\n {tabela_produto_cidade}')
