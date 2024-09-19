@@ -1,10 +1,3 @@
-# AVALIAÇÃO PARCIAL 1
-
-# Aluno 1: Lucas Lopes
-# Aluno 2: Luigi Brum Costabile
-# Aluno 3: Enzo Dancona de Souza
-# Aluno 4: Pedro Henrique Pila Julião
-
 import random
 
 # -------------------------------- CLASSES -----------------------------------------
