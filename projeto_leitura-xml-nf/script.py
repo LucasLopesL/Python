@@ -21,7 +21,7 @@ def ler_xml_danfe():
             valor_produto = produto["prod"]["vProd"]
             nome_produto = produto["prod"]["xProd"]
             lista_produtos.append((nome_produto, valor_produto))
-        arquivoInfo.write(f'Seguem as informações da NF\nNome do vendedor: {cnpj_vendeu}\nNome do vendedor: {nome_vendeu}\nCPF do comprador: {cpf_comprou}\nNome do comprador: {nome_comprou}\nValor Total {valor_total}\n Produtos comprados: {lista_produtos}')
+        arquivoInfo.write(f'Seguem as informações da NF\nCNPJ/CPF do vendedor: {cnpj_vendeu}\nNome do vendedor: {nome_vendeu}\nCNPJ/CPF do comprador: {cpf_comprou}\nNome do comprador: {nome_comprou}\nValor Total {valor_total}\n Produtos comprados: {lista_produtos}')
 
     resposta = {
         "cnpj_vendeu": [cnpj_vendeu],
@@ -55,7 +55,7 @@ def ler_xml_servico():
         nome_comprou = dictNF["TomadorServico"]["RazaoSocial"]
         valor_total = dictNF["Servico"]["Valores"]["ValorServicos"]
         servicos = dictNF["Servico"]["Discriminacao"]
-        arquivoInfo.write(f'Seguem as informações da NF\nNome do vendedor: {cnpj_vendeu}\nNome do vendedor: {nome_vendeu}\nCPF do comprador: {cpf_comprou}\nNome do comprador: {nome_comprou}\nValor Total {valor_total}\n Produtos comprados: {servicos}')
+        arquivoInfo.write(f'Seguem as informações da NF\nCNPJ/CPF do vendedor: {cnpj_vendeu}\nNome do vendedor: {nome_vendeu}\nCNPJ/CPF do comprador: {cpf_comprou}\nNome do comprador: {nome_comprou}\nValor Total {valor_total}\n Produtos comprados: {servicos}')
 
     resposta = {
         "cnpj_vendeu": [cnpj_vendeu],
