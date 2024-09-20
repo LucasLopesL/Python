@@ -1,0 +1,7 @@
+Seguem as informações da NF
+Nome do vendedor: 36882195000279
+Nome do vendedor: BROTA COMPANY COMERCIO DE PLANTAS LTDA
+CPF do comprador: 10000000000
+Nome do comprador: Lucas
+Valor Total 374.17
+ Produtos comprados: [('b.box led', '389.00'), ('Tomilho Serpilho', '10.00'), ('Oregano Bravo-Europeu', '10.00'), ('Manjericao Italiano', '10.00'), ('Coentro Portugues', '10.00'), ('Salsa Hortense', '10.00'), ('Alface Baby-Leaf', '10.00')]
