@@ -1,4 +1,6 @@
-import xmltodict 
+import xmltodict
+import pandas as pd
+
 
 
 with open(r'C:\Users\lucas\OneDrive\Área Pessoal\MeusProjetos\Python\Python\projeto_leitura-xml-nf\DANFEBrota.xml', 'rb') as arquivoBrotas:
@@ -30,4 +32,8 @@ resposta = {
     "produtos": lista_produtos
 }
 
-print(f'Seguem as Informações da NF\n {resposta}')
+tabela = pd.DataFrame.from_dict(resposta)
+nome_arquivo = "NFs.xlsx"
+tabela.to_excel(rf'C:\Users\lucas\OneDrive\Área Pessoal\MeusProjetos\Python\Python\projeto_leitura-xml-nf\{nome_arquivo}')
+
+print(f'Seguem as Informações da NF\n {resposta}\nAs informações foram salvas no arquivo em Excel chamado: "{nome_arquivo}"')
