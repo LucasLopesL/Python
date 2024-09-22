@@ -1,7 +1,7 @@
 Seguem as informações da NF
-Nome do vendedor: 30000000000101
+CNPJ/CPF do vendedor: 30000000000101
 Nome do vendedor: Lucas
-CPF do comprador: 26344392000108
+CNPJ/CPF do comprador: 26344392000108
 Nome do comprador: HASHTAG TREINAMENTOS LTDA
 Valor Total 4500
  Produtos comprados: Nota referente aos serviços realizados no mês de Novembro de 2021.
