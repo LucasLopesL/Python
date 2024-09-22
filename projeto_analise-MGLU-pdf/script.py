@@ -34,3 +34,23 @@ pdf_3T_4T.append(r"Python\projeto_analise-MGLU-pdf\MGLU_ER_4T20_POR.pdf")
 
 with Path(r"Python\projeto_analise-MGLU-pdf\paginas\pdf_3T_4T.pdf").open(mode="wb") as arquivo:
     pdf_3T_4T.write(arquivo)
+
+# Outras manipulações de PDF's
+
+pdf_consolidado = pyf.PdfMerger()
+pdf_consolidado.append(r"Python\projeto_analise-MGLU-pdf\MGLU_ER_4T20_POR.pdf")
+pdf_consolidado.merge(1, r'Python\projeto_analise-MGLU-pdf\paginas\Arquivo Pagina 1.pdf')
+
+with Path(r"Python\projeto_analise-MGLU-pdf\paginas\comparacao.pdf").open(mode="wb") as arquivo:
+    pdf_consolidado.write(arquivo)
+
+pdf_original = pyf.PdfReader(r"Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf")
+
+pdf_rotacionado = pyf.PdfWriter()
+
+for pagina in pdf_original.pages:
+    pagina.rotate(90)
+    pdf_rotacionado.addPage(pagina)
+
+with Path(r"Python\projeto_analise-MGLU-pdf\paginas\rotacionado.pdf").open(mode='wb') as arquivo:
+    pdf_rotacionado.write(arquivo)
