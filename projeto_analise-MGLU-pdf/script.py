@@ -1,5 +1,7 @@
 import PyPDF2 as pyf
 from pathlib import Path
+import tabula
+from pikepdf import Pdf, PdfImage
 
 # Separar um PDF em vários PDF's
 
@@ -50,7 +52,62 @@ pdf_rotacionado = pyf.PdfWriter()
 
 for pagina in pdf_original.pages:
     pagina.rotate(90)
-    pdf_rotacionado.addPage(pagina)
+    pdf_rotacionado.add_page(pagina)
 
 with Path(r"Python\projeto_analise-MGLU-pdf\paginas\rotacionado.pdf").open(mode='wb') as arquivo:
     pdf_rotacionado.write(arquivo)
+
+arq = pyf.PdfReader(r"Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf")
+referencia = "| Despesas com Vendas"
+for i, paginas in enumerate(arq.pages):
+    texto_pagina = arq.extract_text()
+    if referencia in texto_pagina:
+        print("Nº da página: ", i + 1)
+        texto_analisar = texto_pagina
+
+posicao_inicial = texto_analisar.find(referencia)
+posicao_final = texto_analisar.find("|", posicao_inicial + 1)
+texto_final = texto_analisar[posicao_inicial:posicao_final]
+
+print(f'As despesas com vendas da MGLU:\n{texto_pagina}')
+
+tabelas = tabula.read_pdf(r'Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf', pages=5)
+resultado_df = tabelas[0]
+resultado_df = resultado_df.dropna(how="all", axis=0) #Exclui as linhas que estão vazias
+resultado_df = resultado_df.dropna(how="all", axis=1) #Exclui as colunhas que estão vazias
+resultado_df.columns = resultado_df.iloc[0] #Faz com que a primeira linha torne-se as colunas da tabela
+resultado_df = resultado_df.iloc[1:]
+resultado_df = resultado_df.reset_index(drop=True)
+
+
+tabelas2 = tabula.read_pdf(r'Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf', pages=12)
+
+for tabela in tabelas2:
+    tabela = tabela.dropna(how="all", axis=0)
+    tabela = tabela.reset_index(drop=True)
+    # print(tabela)
+
+capital_giro_df = tabelas2[0]
+investimentos = tabelas2[1]
+
+tabelas3 = tabula.read_pdf(r'Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf', pages=12, lattice=True)
+
+capital_giro_df2 = tabelas3[0]
+capital_giro_df2 = capital_giro_df2.dropna(how="all", axis=0)
+capital_giro_df2 = capital_giro_df2.dropna(how="all", axis=1)
+capital_giro_df2 = capital_giro_df2.reset_index(drop=True)
+colunas = capital_giro_df2.iloc[0]
+colunas.dropna()
+capital_giro_df.columns = colunas
+
+print(f'{capital_giro_df}\n{investimentos}')
+
+# Extrair imagens de PDF's
+
+pdf_imagens = Pdf.open(r'Python\projeto_analise-MGLU-pdf\MGLU_ER_3T20_POR.pdf')
+
+for imagem in pdf_imagens.pages:
+    for nome, imagem in pdf_imagens.imagens.items():
+        imagem_salvar = PdfImage(imagem)
+        imagem_salvar.extract_to(fileprefix=rf'Python\projeto_analise-MGLU-pdf\imagens\{nome}')
+        # print(f'Nome da imagem: {nome}\nimagem:\n{imagem}')
