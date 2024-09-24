@@ -26,6 +26,3 @@ for arquivo in arquivos:
         shutil.copy2(Path(rf"Python/projeto_integracao-pastas/Arquivos_Lojas/{arquivo}"), Path(rf"Python/projeto_integracao-pastas/Pasta Auxiliar/SP/{arquivo}"))
     else:
         pass
-
-
-
