@@ -1,4 +1,5 @@
 from tkinter import *
+import pandas as pd
 
 ######## funcionalidades do sistema #############
 
@@ -69,7 +70,35 @@ def consumir_insumo():
 
 
 def visualizar_insumo():
-    print("visualizar_insumo")
+     if len(nome_insumo.get()) < 2 or len(lote_insumo.get()):
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", 'Nome do Insumo inválido!')
+        return
+     else:
+        cursor.execute(
+            f'''
+                SELECT * FROM Estoque
+                WHERE Produto == "{nome_insumo.get()} and Lote == {lote_insumo.get()}"
+            '''
+                    )
+        valores = cursor.fetchall()
+        texto=""
+        for id_produto, nome, quantidade, validade, lote in valores:
+          texto = texto + f'''
+            -------
+            Produto: {id_produto}
+            Nome: {nome}
+            Quantidade: {quantidade}
+            Validade: {validade}
+            Lote: {lote}                
+                        '''
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", f"Segue a relação de insumos\n{texto}")
+        # descricao = cursor.description()
+        # colunas = [desc[0] for desc in descricao]
+        # tabela_insumos = pd.DataFrame.from_records(valores, columns=colunas)
+        # caixa_texto.delete("1.0", END)
+        # caixa_texto.insert("1.0", f"Segue a relação de insumos\n{tabela_insumos}")
 
     
     
