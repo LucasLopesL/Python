@@ -3,7 +3,7 @@ import pandas as pd
 
 # print(pyodbc.drivers())
 
-dados_conexao = {"Drivers={SQLite3 ODBC Driver}; Server=localhost; Database=chinook.db"}
+dados_conexao = ("Drivers={SQLite3 ODBC Driver}; Server=localhost; Database=chinook.db")
 
 conexao = pyodbc.connect(dados_conexao)
 
