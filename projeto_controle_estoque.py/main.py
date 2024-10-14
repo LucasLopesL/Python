@@ -1,5 +1,5 @@
 from tkinter import *
-import pandas as pd
+# import pandas as pd
 
 ######## funcionalidades do sistema #############
 
