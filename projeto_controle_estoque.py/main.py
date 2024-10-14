@@ -17,7 +17,7 @@ def adicionar_insumo():
         '''
                    )
     cursor.commit()
-    
+
     # print(caixa_texto.get('1.0', END))
     # print(nome_insumo.get())
     # print(data_insumo.get())
@@ -31,7 +31,21 @@ def adicionar_insumo():
     caixa_texto.insert("1.0", f'{nome_insumo.get()} adicionado com sucesso!')
     
 def deletar_insumo():
-    print("deletar_insumo")
+    if len(nome_insumo.get()) > 2:
+        print('Nome do insumo inválido')
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", 'Nome do Insumo inválido!')
+        return
+    else:
+        cursor.execute(
+            f'''
+                DELETE FROM Estoque
+                WHERE Produto=="{nome_insumo.get()}"
+            '''
+                       )
+        cursor.commit()
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", f"{nome_insumo.get()} deletado com sucesso!")
 
 def consumir_insumo():
     print("consumir_insumo")
