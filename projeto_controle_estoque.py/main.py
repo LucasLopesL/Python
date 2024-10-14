@@ -4,9 +4,11 @@ from tkinter import *
 
 import pyodbc
 
+
 dados_conexao = ("Drivers={SQLite3 ODBC Driver};Server=localhost;Database=Estoque.db")
 conexao = pyodbc.connect(dados_conexao)
 cursor = conexao.cursor()
+
 
 def adicionar_insumo():
     cursor.execute(
@@ -30,9 +32,9 @@ def adicionar_insumo():
     # escrever na caixa de texto
     caixa_texto.insert("1.0", f'{nome_insumo.get()} adicionado com sucesso!')
     
+
 def deletar_insumo():
-    if len(nome_insumo.get()) > 2:
-        print('Nome do insumo inválido')
+    if len(nome_insumo.get()) < 2:
         caixa_texto.delete("1.0", END)
         caixa_texto.insert("1.0", 'Nome do Insumo inválido!')
         return
@@ -40,15 +42,31 @@ def deletar_insumo():
         cursor.execute(
             f'''
                 DELETE FROM Estoque
-                WHERE Produto=="{nome_insumo.get()}"
+                WHERE Produto == "{nome_insumo.get()}"
             '''
                        )
         cursor.commit()
         caixa_texto.delete("1.0", END)
         caixa_texto.insert("1.0", f"{nome_insumo.get()} deletado com sucesso!")
 
+
 def consumir_insumo():
-    print("consumir_insumo")
+    if len(nome_insumo.get()) < 2 or len(lote_insumo.get()) < 1:
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", 'Nome e/ou lote do insumo inválido')
+        return
+    else:
+        cursor.execute(
+            f'''
+                UPDATE Estoque 
+                SET Quantidade = Quantidade - {qtde_insumo.get()}
+                WHERE Produto == "{nome_insumo.get()}" and Lote == {lote_insumo.get()}
+            '''
+                       )
+        cursor.commit()
+        caixa_texto.delete("1.0", END)
+        caixa_texto.insert("1.0", f"{nome_insumo.get()} foi consumido em {qtde_insumo.get()} unidades!")
+
 
 def visualizar_insumo():
     print("visualizar_insumo")
