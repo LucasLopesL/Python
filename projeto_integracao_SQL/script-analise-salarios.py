@@ -13,7 +13,7 @@ def formatar2(valor):
 
 # print(pyodbc.drivers())
 
-# dados_conexao = ('Drivers={SQLite3 ODBC Driver};Server=localhost;Database=salarios.sqlite');
+# dados_conexao = ('Drivers={SQLite3 ODBC Driver};Server=localhost;Database=salarios.sqlite')
 # conexao2 = pyodbc.connect(dados_conexao)
 # cursor = pyodbc.cursor()
 
