@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, String, Integer, Boolean, ForeignKey, Date, Float
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+
 db = create_engine("sqlite:///meubanco.db")
 Session = sessionmaker(bind=db)
 session = Session()
@@ -42,6 +43,7 @@ class Aluno(Base):
         self.nota_primeiro_semestre = nota_primeiro_semestre
         self.nota_segundo_semestre = nota_segundo_semestre
         self.media_final = media_final
+        
 
 class Turma(Base):
     __tablename__ = "TURMA"
