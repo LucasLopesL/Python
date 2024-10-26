@@ -1,4 +1,5 @@
-from projeto_flask import database, app
+from projeto_flask import app
+from projeto_flask import database
 
 class Professor(database.Model):
     __tablename__ = "professor"
