@@ -10,9 +10,10 @@
       <tr style="text-align: center">
         <th scope="col">ID</th>
         <th scope="col">Nome</th>
-        <th scope="col">Idade</th>
-        <th scope="col">Matéria</th>
-        <th scope="col">Observações</th>
+        <th scope="col">Descrição</th>
+        <th scope="col">Professor</th>
+        <th scope="col">Ativo</th>
+        <th scope="col">Alunos</th>
       </tr>
     </thead>
     <tbody>
@@ -27,9 +28,7 @@
       </tr>
       {% endfor %} {% else %}
       <tr>
-        <td colspan="6" style="text-align: center">
-          Nenhuma Turma cadastrada!
-        </td>
+        <td colspan="6" style="text-align: center">Nenhuma Turma cadastrada</td>
       </tr>
       {% endif %}
     </tbody>
