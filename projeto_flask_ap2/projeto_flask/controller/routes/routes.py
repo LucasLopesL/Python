@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, flash, request
-from projeto_flask import app, database
-from projeto_flask.forms import criarAluno, criarProfessor, criarTurma, atualizarAluno, atualizarProfessor, atualizarTurma, deletarProfessor, deletarAluno, deletarTurma
-from projeto_flask.models import Professor, Aluno, Turma
+from projeto_flask import app
+from projeto_flask import database
+from projeto_flask.controller.forms import criarAluno, criarProfessor, criarTurma, atualizarAluno, atualizarProfessor, atualizarTurma, deletarProfessor, deletarAluno, deletarTurma
+from projeto_flask.models.models import Professor, Aluno, Turma
 
 
 @app.route("/")
@@ -22,6 +23,7 @@ def create():
             database.session.commit()
             flash(f"Criação do(a) Professor(a): {criar_professor.nome.data} bem sucedida!", "alert-success")
             return redirect(url_for("homepage"))
+        
         except Exception as e:
             database.session.rollback()
             flash("Erro ao criar Professor: " + str(e), "alert-danger")
@@ -29,13 +31,16 @@ def create():
         if not criar_professor.validate_on_submit():
             flash("Erro ao validar formulário de professor: " + str(criar_professor.errors), "alert-danger")
 
+
     if criar_aluno.validate_on_submit() and "confirmacao_create_aluno" in request.form:
+
         try:
-            aluno = Professor(nome=criar_aluno.nome.data, idade=criar_aluno.idade.data, turma=criar_aluno.turma_id.data, data_nascimento=criar_aluno.data_nascimento.data, nota_semestre1 = criar_aluno.nota_semestre1.data, nota_semestre2 = criar_aluno.nota_semestre2.data, media=criar_aluno.media.data)
+            aluno = Aluno(nome=criar_aluno.nome.data, idade=criar_aluno.idade.data, turma=Turma.query.get(criar_aluno.turma_id.data), data_nascimento=criar_aluno.data_nascimento.data, nota_semestre1 = criar_aluno.nota_semestre1.data, nota_semestre2 = criar_aluno.nota_semestre2.data, media=criar_aluno.media.data)
             database.session.add(aluno)
             database.session.commit()
             flash(f"Criação do(a) Aluno(a): {criar_aluno.nome.data} bem sucedida!", "alert-success")
             return redirect(url_for("homepage"))
+        
         except Exception as e:
             database.session.rollback()
             flash("Erro ao criar Aluno: " + str(e), "alert-danger")
@@ -45,11 +50,12 @@ def create():
     
     if criar_turma.validate_on_submit() and "confirmacao_create_turma" in request.form:
         try:
-            turma = Turma(nome=criar_turma.nome.data, descricao=criar_turma.descricao.data, professor=criar_turma.professor_id.data, ativo=criar_turma.ativo.data)
+            turma = Turma(nome=criar_turma.nome.data, descricao=criar_turma.descricao.data, professor=Professor.query.get(criar_turma.professor_id.data), ativo=criar_turma.ativo.data)
             database.session.add(turma)
             database.session.commit()
             flash(f"Criação da Turma: {criar_turma.nome.data} bem sucedida!", "alert-success")
             return redirect(url_for("homepage"))
+        
         except Exception as e:
             database.session.rollback()
             flash("Erro ao criar Turma: " + str(e), "alert-danger")
@@ -92,10 +98,14 @@ def update():
 
     if atualizar_professor.validate_on_submit() and "confirmacao_update_prof" in request.form:
         try:
-            database.session.query(Professor).filter(Professor.id == atualizar_professor.id.data).update({"nome": atualizar_professor.nome.data, "idade": atualizar_professor.idade.data, "materia": atualizar_professor.materia.data, "observacoes": atualizar_professor.observacoes.data})
-            database.session.commit()
-            flash(f"Atualização do(a) Professor(a) ID:{atualizar_professor.id.data} bem sucedida!", "alert-warning")
-            return redirect(url_for("homepage"))
+            if Professor.query.get(atualizar_professor.id.data):
+                database.session.query(Professor).filter(Professor.id == atualizar_professor.id.data).update({"nome": atualizar_professor.nome.data, "idade": atualizar_professor.idade.data, "materia": atualizar_professor.materia.data, "observacoes": atualizar_professor.observacoes.data})
+                database.session.flush()
+                database.session.commit()
+                flash(f"Atualização do(a) Professor(a) ID:{atualizar_professor.id.data} bem sucedida!", "alert-warning")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {atualizar_professor.id.data} não é válido!", "alert-warning")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao atualizar Professor: " + str(e), "alert-danger")
@@ -106,10 +116,14 @@ def update():
 
     if atualizar_aluno.validate_on_submit() and "confirmacao_update_aluno" in request.form:
         try:
-            database.session.query(Aluno).filter(Aluno.id == atualizar_aluno.id.data).update({"nome": atualizar_aluno.nome.data, "idade": atualizar_aluno.idade.data, "turma": atualizar_aluno.turma_id.data, "data_nascimento": atualizar_aluno.data_nascimento.data, "nota_semestre1": atualizar_aluno.nota_semestre1.data, "nota_semestre2": atualizar_aluno.nota_semestre2.data, "media": atualizar_aluno.media.data})
-            database.session.commit()
-            flash(f"Atualização do(a) aluno(a) ID:{atualizar_aluno.id.data} bem sucedida!", "alert-warning")
-            return redirect(url_for("homepage"))
+            if Aluno.query.get(atualizar_aluno.id.data):
+                database.session.query(Aluno).filter(Aluno.id == atualizar_aluno.id.data).update({"nome": atualizar_aluno.nome.data, "idade": atualizar_aluno.idade.data, "turma": atualizar_aluno.turma_id.data, "data_nascimento": atualizar_aluno.data_nascimento.data, "nota_semestre1": atualizar_aluno.nota_semestre1.data, "nota_semestre2": atualizar_aluno.nota_semestre2.data, "media": atualizar_aluno.media.data})
+                database.session.flush()
+                database.session.commit()
+                flash(f"Atualização do(a) aluno(a) ID:{atualizar_aluno.id.data} bem sucedida!", "alert-warning")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {atualizar_aluno.id.data} não é válido!", "alert-warning")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao atualizar Aluno: " + str(e), "alert-danger")
@@ -119,9 +133,14 @@ def update():
 
     if atualizar_turma.validate_on_submit() and "confirmacao_update_turma" in request.form:
         try:
-            database.session.query(Turma).filter(Turma.id == atualizar_turma.id.data).update({"nome": atualizar_turma.nome.data, "descricao": atualizar_turma.descricao.data, "professor": atualizar_turma.professor_id.data, "ativo": atualizar_turma.ativo.data})
-            flash(f"Atualização da Turma ID:{atualizar_turma.id.data} bem sucedida!", "alert-warning")
-            return redirect(url_for("homepage"))
+            if Turma.query.get(atualizar_turma.id.data):
+                database.session.query(Turma).filter(Turma.id == atualizar_turma.id.data).update({"nome": atualizar_turma.nome.data, "descricao": atualizar_turma.descricao.data, "professor_id": atualizar_turma.professor_id.data, "ativo": atualizar_turma.ativo.data})
+                database.session.flush()
+                database.session.commit()
+                flash(f"Atualização da Turma ID:{atualizar_turma.id.data} bem sucedida!", "alert-warning")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {atualizar_turma.id.data} não é válido!", "alert-warning")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao atualizar Turma: " + str(e), "alert-danger")
@@ -140,10 +159,13 @@ def delete():
 
     if deletar_professor.validate_on_submit() and "confirmacao_delete_prof" in request.form:
         try:
-            database.session.query(Professor).filter(Professor.id == deletar_professor.id.data).delete()
-            database.session.commit()
-            flash(f"Professor ID: {deletar_professor.id.data} deletado com sucesso!", "alert-danger")
-            return redirect(url_for("homepage"))
+            if Professor.query.get(deletar_professor.id.data):
+                database.session.query(Professor).filter(Professor.id == deletar_professor.id.data).delete()
+                database.session.commit()
+                flash(f"Professor ID: {deletar_professor.id.data} deletado com sucesso!", "alert-danger")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {deletar_professor.id.data} não é válido!", "alert-danger")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao deletar Professor: " + str(e), "alert-danger")
@@ -153,10 +175,13 @@ def delete():
     
     if deletar_aluno.validate_on_submit() and "confirmacao_delete_aluno" in request.form:
         try:
-            database.session.query(Aluno).filter(Aluno.id == deletar_aluno.id.data).delete()
-            database.session.commit()
-            flash(f"Aluno ID: {deletar_aluno.id.data} deletado com sucesso!", "alert-danger")
-            return redirect(url_for("homepage"))
+            if Aluno.query.get(deletar_aluno.id.data):
+                database.session.query(Aluno).filter(Aluno.id == deletar_aluno.id.data).delete()
+                database.session.commit()
+                flash(f"Aluno ID: {deletar_aluno.id.data} deletado com sucesso!", "alert-danger")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {deletar_aluno.id.data} não é válido!", "alert-danger")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao deletar Aluno: " + str(e), "alert-danger")
@@ -166,10 +191,13 @@ def delete():
     
     if deletar_turma.validate_on_submit() and "confirmacao_delete_turma" in request.form:
         try:
-            database.session.query(Turma).filter(Turma.id == deletar_turma.id.data).delete()
-            database.session.commit()
-            flash(f"Turma ID: {deletar_turma.id.data} deletada com sucesso!", "alert-danger")
-            return redirect(url_for("homepage"))
+            if Turma.query.get(deletar_turma.id.data):
+                database.session.query(Turma).filter(Turma.id == deletar_turma.id.data).delete()
+                database.session.commit()
+                flash(f"Turma ID: {deletar_turma.id.data} deletada com sucesso!", "alert-danger")
+                return redirect(url_for("homepage"))
+            else:
+                flash(f"O ID: {deletar_turma.id.data} não é válido!", "alert-danger")
         except Exception as e:
             database.session.rollback()
             flash("Erro ao deletar Turma: " + str(e), "alert-danger")
