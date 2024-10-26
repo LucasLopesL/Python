@@ -7,7 +7,7 @@ class criarProfessor(FlaskForm):
     idade = IntegerField("Idade: ", validators=[DataRequired()])
     materia = StringField("Matéria: ", validators=[DataRequired()])
     observacoes = TextAreaField("Observações: ", validators=[DataRequired()])
-    confirmacao_create_prof = SubmitField("Enviar")
+    confirmacao_create_prof = SubmitField("Criar")
 
 class criarAluno(FlaskForm):
     nome = StringField("Nome: ", validators=[DataRequired()])
@@ -17,14 +17,14 @@ class criarAluno(FlaskForm):
     nota_semestre1 = FloatField("Nota do 1º Semestre: ", validators=[DataRequired()])
     nota_semestre2 = FloatField("Nota do 2º Semestre: ", validators=[DataRequired()])
     media = FloatField("Média Final", validators=[DataRequired(), NumberRange(min=0.0, max=10.0)])
-    confirmacao_create_aluno = SubmitField("Enviar")
+    confirmacao_create_aluno = SubmitField("Criar")
 
 class criarTurma(FlaskForm):
     nome = StringField("Nome da turma: ", validators=[DataRequired()])
     descricao = TextAreaField("Descrição: ", validators=[DataRequired()])
     professor_id = IntegerField("ID do Professor: ", validators=[DataRequired()])
     ativo = BooleanField("Essa turma está ativa? ", validators=[DataRequired()])
-    confirmacao_create_turma = SubmitField("Enviar")
+    confirmacao_create_turma = SubmitField("Criar")
 
 class atualizarProfessor(FlaskForm):
     id = IntegerField("ID do(a) Professor(a): ", validators=[DataRequired()])
