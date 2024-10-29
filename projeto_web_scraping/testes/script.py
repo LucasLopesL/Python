@@ -215,7 +215,7 @@ driver.save_screenshot("projeto_web_scraping\testes\prints\print.png")
 
 # Parte da tela
 imagem = Image.open("projeto_web_scraping\testes\prints\print.png")
-# No crop() devemos passar a posição das quatro pontas em formato de TUPLA de ontem tiraremos o print (Base de eixo x e eixo y) -> Usar a ferramenta do desenvolvedor
+# No crop() devemos passar a posição das quatro pontas em formato de TUPLA de ontem tiraremos o print (Base de eixo x e eixo y) -> Usar a ferramenta do desenvolvedor. Se não funcionar olhe a escala da tela do seu computador (Multiplique pela escala)
 xy_imagem = driver.find_element(By.ID, "header")
 
 posicao = xy_imagem.location
