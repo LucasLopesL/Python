@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
+from PIL import Image
 import os
 
 
@@ -201,3 +202,29 @@ element = WebDriverWait(driver, 20).until(
 )
 sleep(1) # Garantia de que o item apareceu na tela
 element.click()
+
+
+# PrintScreen - Tela Inteira e parte da tela
+
+caminho = os.getcwd()
+arquivo = caminho + r"/Pagina Hashtag.html"
+driver.get(arquivo)
+
+# Tela Inteira
+driver.save_screenshot("projeto_web_scraping\testes\prints\print.png")
+
+# Parte da tela
+imagem = Image.open("projeto_web_scraping\testes\prints\print.png")
+# No crop() devemos passar a posição das quatro pontas em formato de TUPLA de ontem tiraremos o print (Base de eixo x e eixo y) -> Usar a ferramenta do desenvolvedor
+xy_imagem = driver.find_element(By.ID, "header")
+
+posicao = xy_imagem.location
+tamanho = xy_imagem.size
+
+x_inicial = posicao["x"]
+y_inicial = posicao["y"]
+x_final = x_inicial + tamanho["width"]
+y_final = y_inicial + tamanho["height"]
+
+imagem = imagem.crop((x_inicial, y_inicial, x_final, y_final))
+imagem.save("projeto_web_scraping\testes\prints\pedaco_print.png")
