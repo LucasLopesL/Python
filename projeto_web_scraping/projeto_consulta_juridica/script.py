@@ -66,7 +66,7 @@ for processo in lista_processos.index():
         lista_processos.loc[processo, "Status"] = "Processo NÃO encontrado!"
         # Fechar o alerta
         alerta.accept()
-    # Esperar o segundo alerta aparecer
+    # Esperar o segundo alerta aparecer para acessar o processo
     WebDriverWait(driver, 20).until(EC.alert_is_present())
     # Trocar para o alerta
     alerta2 = driver.switch_to.alert
