@@ -1,7 +1,10 @@
 from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
@@ -123,3 +126,78 @@ elemento_select.select_by_value("b")
 elemento_select.first_selected_option()
 # Ler todos os itens selecionados
 # elemento_select.all_selected_options()
+
+# Actions Chains -> Bom para alguns dropdowns especiais
+menu = driver.find_element(By.XPATH, 'xpath')
+item = driver.find_element(By.XPATH, "xpath")
+ActionChains(driver).move_to_element(menu).perform()
+sleep(0.5)
+item.click()
+
+
+# Alertas
+
+caminho = os.getcwd()
+arquivo = caminho + r"/alertas.html"
+driver.get(arquivo)
+
+# Alertas básicos
+driver.find_element(By.XPATH, "/html/body/div[2]/input").click()
+alerta = Alert(driver) # ou alerta = driver.switch_to.alerta
+alerta.accept()
+
+# Alerta com confirmação
+driver.find_element(By.XPATH, "/html/body/div[3]/input").click()
+alerta = Alert(driver)
+# Pegar o texto do alerta
+print(alerta.text)
+# Aceitar
+alerta.accept()
+# Cancelar
+alerta.dismiss()
+
+# Alerta com Input
+driver.find_element(By.XPATH, "/html/body/div[4]/button").click()
+alerta = Alert(driver)
+# Envia informações para o input do alerta
+alerta.send_keys("123.456.789-07")
+alerta.accept()
+
+
+# Abas e diferentes Janelas
+
+caminho = os.getcwd()
+arquivo = caminho + r"/Pagina Hashtag.html"
+driver.get(arquivo)
+
+# Funciona da mesma forma para janelas e abas
+driver.find_element(By.XPATH, "/html/body/section[2]/div/div[6]/figure/a/img").click() # Muda pra nova ABA
+lista_abas = driver.window_handles()
+aba_original = lista_abas[0]
+aba_bi = lista_abas[1]
+driver.switch_to.window(aba_bi) # Muda para a nova aba
+driver.find_element(By.ID, "firstname").send_keys("Lucas")
+driver.find_element(By.ID, "email").send_keys("lucasreidopython@gmail.com")
+driver.find_element(By.ID, "phone").send_keys('11 99999-9999')
+driver.find_element(By.ID, "_form_1155_submit").click()
+driver.switch_to.window(aba_original) # Volta pra aba orinal
+driver.close() # Fecha a aba ativa/atual
+driver.quit() # Fecha o navegador
+
+# Pop-ups
+
+driver.get("https://www.hashtagtreinamentos.com/")
+# Loop
+while len(driver.find_element(By.ID, "botaoPopupFechar")) < 1: # Esperar o Pop-up aparecer na tela
+    sleep(1)
+sleep(1)
+
+driver.find_element(By.ID, "botaoPopupFechar").click()
+
+# Expected Conditions (EC) -> Loop padrão do Selenium
+driver.get("https://www.hashtagtreinamentos.com/")
+element = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.ID, "botaoPopupFechar"))
+)
+sleep(1) # Garantia de que o item apareceu na tela
+element.click()
