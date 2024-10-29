@@ -228,3 +228,14 @@ y_final = y_inicial + tamanho["height"]
 
 imagem = imagem.crop((x_inicial, y_inicial, x_final, y_final))
 imagem.save("projeto_web_scraping\testes\prints\pedaco_print.png")
+
+# Gereciamento da tela do navegador
+driver.maximize_window()
+driver.minimize_window()
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless') # Modo para rodar a automação de forma secreta (Sem aparecer)
+options.add_argument(r'user-data-dir=C:\Users\lucas\AppData\Local\Google\Chrome\User Data\Profile Selenium') # Modo de abri o navegador com cookies e logins (para saber o perfil -> chrome://version)
+options.add_argument('--start-maximaze')
+options.add_argument('--disable-extensions')
+novo_driver = driver = webdriver.Chrome(service=servico, options=options)
