@@ -239,3 +239,38 @@ options.add_argument(r'user-data-dir=C:\Users\lucas\AppData\Local\Google\Chrome\
 options.add_argument('--start-maximaze')
 options.add_argument('--disable-extensions')
 novo_driver = driver = webdriver.Chrome(service=servico, options=options)
+
+# Scroll na página
+
+driver.get("https://www.youtube.com/results?search_query=python")
+
+lista_videos = driver.find_elements(By.ID, "thumbnail")
+
+try:
+    for video in lista_videos:
+        for i in range(15):
+            qtd_scroll = i * 1000
+            driver.execute_script(f"window.scroll(0, {qtd_scroll})")
+            sleep(2) # Dar tempo de carregaros elementos da página.
+        video.get_attribute('href')
+except:
+    pass
+
+# iFrames -> Como se fosse um site rodando dentro de outro site
+
+driver.get("https://pbdatatrader.com.br/jogosdodia")
+WebDriverWait(driver, 30).until(
+    EC.presence_of_element_located((By.XPATH, "XPATH"))
+)
+iframe = driver.find_element(By.TAG_NAME, "iframe") # Entrar no 1º iFrame
+driver.switch_to.frame(iframe)
+
+iframe = driver.find_element(By.TAG_NAME, "iframe") # Entrar no 1º iFrame
+driver.switch_to.frame(iframe)
+
+texto = driver.find_element(By.ID, "pvExplorationHost").text # Pega a informação dentro do iFrame
+print(texto)
+
+# Como quebrar qualquer CAPTCHA - AntiCaptcha
+
+
