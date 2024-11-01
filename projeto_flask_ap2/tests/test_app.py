@@ -11,43 +11,28 @@ def client():
         yield client
 
 def test_homepage(client):
-    # Faz uma requisição GET para a homepage
     response = client.get('/')
-    # Verifica se o status da resposta é 200 (OK)
     assert response.status_code == 200
-    # Verifica se algum texto esperado está na resposta
     assert b"Bem-vindo" in response.data
 
 def test_create_page(client):
-    # Faz uma requisição GET para a página /create
     response = client.get('/create')
-    # Verifica se o status da resposta é 200 (OK)
     assert response.status_code == 200
-    # Verifica se algum texto esperado está na resposta
     assert b"Create" in response.data
 
 def test_read_page(client):
-    # Faz uma requisição GET para a página /read
     response = client.get('/read')
-    # Verifica se o status da resposta é 200 (OK)
     assert response.status_code == 200
-    # Verifica se algum texto esperado está na resposta
     assert b"Read" in response.data
 
 def test_update_page(client):
-    # Faz uma requisição GET para a página /update
     response = client.get('/update')
-    # Verifica se o status da resposta é 200 (OK)
     assert response.status_code == 200
-    # Verifica se algum texto esperado está na resposta
     assert b"Update" in response.data
 
 def test_delete_page(client):
-    # Faz uma requisição GET para a página /delete
     response = client.get('/delete')
-    # Verifica se o status da resposta é 200 (OK)
     assert response.status_code == 200
-    # Verifica se algum texto esperado está na resposta
     assert b"Delete" in response.data
 
 # def test_create_professor(client):
